@@ -6,9 +6,15 @@ A tool that sends an unencrypted network traffic to a local proxy server, so you
 ### Usage:
 Start the `Server.py` script. It will create a local proxy server.
 Inject the `Client.dll` into the game. It will automatically connect to the local server and start forwarding the traffic.
+### Notes:
+- recv port: 11111
+- send port: 22222
 
 ## Game Events
 A tool that monitors the game events and sends them to a local server for analysis.
 ### Usage:
 Start the `Anlyzer.py` script. It will create a local server where the data will be send to.
 Inject the `Dispatcher.dll` into the game. It will send all the data to the server.
+### Notes:
+- port: 33333
+- `Analyzer.py` is automatically reloaded at runtime, so you can update it and see the results immediatelly.
