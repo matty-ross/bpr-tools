@@ -55,7 +55,7 @@ __declspec(naked) void ProcessGameEventsDetourThunk()
         pushad
 
         // call the detour
-        push[esi - 0xC]
+        push [esi - 0xC]
         push ecx
         push esi
         call ProcessGameEventsDetour
@@ -63,7 +63,7 @@ __declspec(naked) void ProcessGameEventsDetourThunk()
         // restore context and jump back to the original code
         popad
         popfd
-        jmp dword ptr[ecx * 4 + 0x00A28E10]
+        jmp dword ptr [ecx * 4 + 0x00A28E10]
     }
 }
 
