@@ -2,7 +2,7 @@
 A collection of tools for Burnout Paradise Remastered to aid with reverse engineering.
 
 ## Proxy Server
-A tool that sends an unencrypted network traffic to a local proxy server, so you analyze it in Wireshark.
+A tool that sends an unencrypted network traffic to a local proxy server, so you can analyze it in Wireshark.
 ### Usage:
 Start the `Server.py` script. It will create a local proxy server.
 Inject the `Client.dll` into the game. It will automatically connect to the local server and start forwarding the traffic.
