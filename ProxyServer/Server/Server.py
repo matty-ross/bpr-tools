@@ -44,22 +44,14 @@ class ProxyServer:
             client.recv(0x1000)
 
 
-def HandleRecvSocket(proxy_server: ProxyServer) -> None:
-    proxy_server.CreateRecvSocket(HOST, RECV_PORT)
-    proxy_server.ListenForRecvData()
-
-
-def HandleSendSocket(proxy_server: ProxyServer) -> None:
-    proxy_server.CreateSendSocket(HOST, SEND_PORT)
-    proxy_server.ListenForSendData()
-
-
 def Main():
     proxy_server = ProxyServer()
+    proxy_server.CreateRecvSocket(HOST, RECV_PORT)
+    proxy_server.CreateSendSocket(HOST, SEND_PORT)
 
-    recv_thread = threading.Thread(target = HandleRecvSocket, args = [proxy_server])
-    recv_thread.start()
-    send_thread = threading.Thread(target = HandleSendSocket, args = [proxy_server])
+    recv_thread = threading.Thread(target = ProxyServer.ListenForRecvData, args = [proxy_server])
+    recv_thread.start()  
+    send_thread = threading.Thread(target = ProxyServer.ListenForSendData, args = [proxy_server])
     send_thread.start()
 
     recv_thread.join()
