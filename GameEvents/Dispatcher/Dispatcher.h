@@ -7,6 +7,7 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
+
 class Dispatcher
 {
 public:
@@ -15,11 +16,12 @@ public:
 
 public:
     void CreateAnalyzerSocket(const char* host, uint16_t port);
-    void ForwardData(int32_t event_type, uint32_t event_size, const uint8_t* event_data);
+    void ForwardData(const uint8_t* event_data, int32_t event_type, uint32_t event_size);
     void HookProcessGameEvents();
 
 private:
     SOCKET mAnalyzerSocket = INVALID_SOCKET;
 };
+
 
 inline Dispatcher* gDispatcher = nullptr;

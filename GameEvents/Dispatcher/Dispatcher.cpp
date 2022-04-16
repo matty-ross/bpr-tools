@@ -1,5 +1,8 @@
 #include "Dispatcher.h"
+
+#include <cstdlib>
 #include <ws2tcpip.h>
+
 
 Dispatcher::Dispatcher()
 {
@@ -27,23 +30,36 @@ void Dispatcher::CreateAnalyzerSocket(const char* host, uint16_t port)
     connect(mAnalyzerSocket, reinterpret_cast<sockaddr*>(&address), sizeof(address));
 }
 
-void Dispatcher::ForwardData(int32_t event_type, uint32_t event_size, const uint8_t* event_data)
+void Dispatcher::ForwardData(const uint8_t* event_data, int32_t event_type, uint32_t event_size)
 {
-    const size_t data_size = sizeof(int32_t) + sizeof(uint32_t) + event_size;
-    uint8_t* const data = new uint8_t[data_size];
-
-    *reinterpret_cast<int32_t*>(data + 0x0) = event_type;
-    *reinterpret_cast<uint32_t*>(data + 0x4) = event_size;
-    memcpy_s(data + 0x8, event_size, event_data, event_size);
+#pragma warning(disable: 4200) // warning C4200: nonstandard extension used: zero-sized array in struct/union
+    struct alignas(4) EventData
+    {
+        int32_t Type;
+        uint32_t Size;
+        uint8_t Data[];
+    };
+#pragma warning(default: 4200)
+    
+    // allocate memory for the packet
+    const size_t data_size = sizeof(EventData) + event_size;
+    EventData* const data = static_cast<EventData*>(malloc(data_size));
+    if (data == nullptr)
+        return;
+    
+    // build the packet and send it
+    data->Type = event_type;
+    data->Size = event_size;
+    memcpy_s(data->Data, event_size, event_data, event_size);
     send(mAnalyzerSocket, reinterpret_cast<const char*>(data), data_size, 0);
-
-    delete[] data;
+    
+    free(data);
 }
 
 
 void __stdcall ProcessGameEventsDetour(const uint8_t* event_data, int32_t event_type, uint32_t event_size)
 {
-    gDispatcher->ForwardData(event_type, event_size, event_data);
+    gDispatcher->ForwardData(event_data, event_type, event_size);
 }
 
 __declspec(naked) void ProcessGameEventsDetourThunk()
