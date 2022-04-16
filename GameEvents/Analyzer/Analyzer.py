@@ -13,18 +13,15 @@ class Analyzer:
     def __init__(self):
         self.mAnalyzerSocket = None
 
-
     def __del__(self):
         if self.mAnalyzerSocket:
             self.mAnalyzerSocket.close()
-
 
     def CreateAnalyzerSocket(self, host: str, port: int) -> None:
         self.mAnalyzerSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM, socket.IPPROTO_TCP)
         self.mAnalyzerSocket.bind((host, port))
         self.mAnalyzerSocket.listen()
         print(f"analyzer socket created and listening at {host}:{port}")
-
 
     def ListenForData(self) -> None:
         client, _ = self.mAnalyzerSocket.accept()
