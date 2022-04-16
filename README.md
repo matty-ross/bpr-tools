@@ -13,7 +13,7 @@ Inject the `Client.dll` into the game. It will automatically connect to the loca
 ## Game Events
 A tool that monitors the game events and sends them to a local server for analysis.
 ### Usage:
-Start the `Anlyzer.py` script. It will create a local server where the data will be send to.
+Start the `Analyzer.py` script. It will create a local server where the data will be send to.
 Inject the `Dispatcher.dll` into the game. It will send all the data to the server.
 ### Notes:
 - port: 33333
