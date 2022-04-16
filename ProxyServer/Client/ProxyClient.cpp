@@ -1,5 +1,7 @@
 #include "ProxyClient.h"
+
 #include <ws2tcpip.h>
+
 
 ProxyClient::ProxyClient()
 {
@@ -93,6 +95,7 @@ void ProxyClient::HookSendHandler()
     DWORD old_protection = 0;
     VirtualProtect(reinterpret_cast<void*>(HOOK_ADDRESS), HOOK_SIZE, PAGE_EXECUTE_READWRITE, &old_protection);
 
+    // install a detour
     *reinterpret_cast<uint8_t*>(HOOK_ADDRESS) = 0xE9;
     *reinterpret_cast<uintptr_t*>(HOOK_ADDRESS + 0x1) = reinterpret_cast<uintptr_t>(SendHandlerDetourThunk) - HOOK_ADDRESS - 0x5;
     memset(reinterpret_cast<void*>(HOOK_ADDRESS + 0x5), 0x90, HOOK_SIZE - 5);
@@ -100,6 +103,7 @@ void ProxyClient::HookSendHandler()
     // restore memory page protection
     VirtualProtect(reinterpret_cast<void*>(HOOK_ADDRESS), HOOK_SIZE, old_protection, &old_protection);
 }
+
 
 void __stdcall RecvHandlerDetour(const void* data, uint32_t size)
 {
@@ -142,6 +146,7 @@ void ProxyClient::HookRecvHandler()
     DWORD old_protection = 0;
     VirtualProtect(reinterpret_cast<void*>(HOOK_ADDRESS), HOOK_SIZE, PAGE_EXECUTE_READWRITE, &old_protection);
 
+    // install a detour
     *reinterpret_cast<uint8_t*>(HOOK_ADDRESS) = 0xE9;
     *reinterpret_cast<uintptr_t*>(HOOK_ADDRESS + 0x1) = reinterpret_cast<uintptr_t>(RecvHandlerDetourThunk) - HOOK_ADDRESS - 0x5;
 

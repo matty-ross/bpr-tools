@@ -1,8 +1,10 @@
 #include "ProxyClient.h"
 
+
 static constexpr const char* HOST = "127.0.0.1";
 static constexpr uint16_t RECV_PORT = 11111;
 static constexpr uint16_t SEND_PORT = 22222;
+
 
 BOOL WINAPI DllMain(
     _In_ HINSTANCE hinstDLL,

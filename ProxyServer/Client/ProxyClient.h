@@ -7,6 +7,7 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
+
 class ProxyClient
 {
 public:
@@ -25,5 +26,6 @@ private:
     SOCKET mRecvSocket = INVALID_SOCKET;
     SOCKET mSendSocket = INVALID_SOCKET;
 };
+
 
 inline ProxyClient* gProxyClient = nullptr;
